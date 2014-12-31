@@ -13,12 +13,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.wearable.watchface.CanvasWatchFaceService;
+import android.support.wearable.watchface.WatchFaceStyle;
 import android.text.format.Time;
 import android.util.Log;
 import android.view.SurfaceHolder;
-
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.wearable.Wearable;
 
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
@@ -27,22 +25,21 @@ import java.util.concurrent.TimeUnit;
  * Created by Mikhail on 28/12/2014.
  */
 public class SwearWatchFaceService extends CanvasWatchFaceService{
-    private static final String TAG = "SwearWatchFaceService";
+    static final String TAG = "SwearWatchFaceService";
 
     /** Update every 5 seconds. Don't really need any more accuracy than that
      *  considering the precision of the clock is already at 5 minutes
      */
-    private static final long NORMAL_UPDATE_RATE_MS = 5000;
+    static final long NORMAL_UPDATE_RATE_MS = 5000;
 
     /** Update every minute
      */
-    private static final long MUTE_UPDATE_RATE_MS = TimeUnit.MINUTES.toMillis(1);
+    static final long MUTE_UPDATE_RATE_MS = TimeUnit.MINUTES.toMillis(1);
 
-    private static final Typeface BOLD_TYPEFACE =
+    static final Typeface BOLD_TYPEFACE =
             Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD);
-    private static final Typeface NORMAL_TYPEFACE =
+    static final Typeface NORMAL_TYPEFACE =
             Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL);
-    private static final Paint BACKGROUND = new Paint();
 
     static final int MSG_UPDATE_TIME = 0;
 
@@ -51,6 +48,7 @@ public class SwearWatchFaceService extends CanvasWatchFaceService{
 
     /* device features */
     boolean mLowBitAmbient;
+    boolean mBurnInProtection;
 
     @Override
     public Engine onCreateEngine() {
@@ -90,6 +88,17 @@ public class SwearWatchFaceService extends CanvasWatchFaceService{
                 }
             }
         };
+        private Paint mBackground;
+        private Paint mBoldPaint;
+        private Paint mNormalPaint;
+        private Paint mStrokePaint;
+        private Paint mBackgroundAmbient;
+
+        private static final float offsetX = 65.0f;
+        private static final float offsetY = 75.0f;
+        private static final float hourOffsetY = 105.0f;
+        private static final float fuckingOffsetY = 135.0f;
+        private static final float minuteOffsetY = 165.0f;
 
         private void updateTimer() {
             mUpdateTimeHandler.removeMessages(MSG_UPDATE_TIME);
@@ -115,14 +124,46 @@ public class SwearWatchFaceService extends CanvasWatchFaceService{
         public void onCreate(SurfaceHolder holder) {
             super.onCreate(holder);
 
-            BACKGROUND.setColor(Color.BLACK);
+            /* configure the system UI */
+            setWatchFaceStyle(new WatchFaceStyle.Builder(SwearWatchFaceService.this)
+                    .setCardPeekMode(WatchFaceStyle.PEEK_MODE_SHORT)
+                    .setBackgroundVisibility(WatchFaceStyle
+                            .BACKGROUND_VISIBILITY_INTERRUPTIVE)
+                    .setShowSystemUiTime(false)
+                    .build());
+
+            mBackground = new Paint();
+            mBackground.setColor(Color.rgb(41, 1, 73));
+
+            mBackgroundAmbient = new Paint();
+            mBackgroundAmbient.setColor(Color.BLACK);
+
+            mBoldPaint = createTypefacePaint(BOLD_TYPEFACE, Color.WHITE, 35.0f);
+
+            mNormalPaint = createTypefacePaint(NORMAL_TYPEFACE, Color.WHITE, 35.0f);
+
+            mStrokePaint = createTypefacePaint(BOLD_TYPEFACE, Color.WHITE, 35.0f);
+            mStrokePaint.setAlpha(MUTE_ALPHA);
+            mStrokePaint.setStyle(Paint.Style.STROKE);
+            mStrokePaint.setStrokeWidth(1);
 
             mTime = new Time();
         }
 
+        private Paint createTypefacePaint(Typeface typeface, int color, float textSize) {
+            Paint result = new Paint();
+            result.setTypeface(typeface);
+            result.setColor(color);
+            result.setTextSize(textSize);
+            return result;
+        }
+
         @Override
         public void onPropertiesChanged(Bundle properties) {
-            /* get device features (burn-in, low-bit ambient) */
+            super.onPropertiesChanged(properties);
+            mLowBitAmbient = properties.getBoolean(PROPERTY_LOW_BIT_AMBIENT, false);
+            mBurnInProtection = properties.getBoolean(PROPERTY_BURN_IN_PROTECTION,
+                    false);
         }
 
         @Override
@@ -133,17 +174,40 @@ public class SwearWatchFaceService extends CanvasWatchFaceService{
 
         @Override
         public void onAmbientModeChanged(boolean inAmbientMode) {
-            /* the wearable switched between modes */
-            mLowBitAmbient = inAmbientMode;
+            super.onAmbientModeChanged(inAmbientMode);
+            invalidate();
+            updateTimer();
         }
 
         @Override
         public void onDraw(Canvas canvas, Rect bounds) {
-            /* draw your watch face */
-            Paint p = new Paint();
-            p.setColor(Color.GREEN);
-            p.setTypeface(Typeface.SANS_SERIF);
-            canvas.drawText("Mikhail is Awesome", 50, 50, p);
+            float offset1, offset2;
+
+            if(SwearStrings.hasMinutes(mTime)) {
+                offset1 = minuteOffsetY;
+                offset2 = hourOffsetY;
+            }
+            else {
+                offset1 = hourOffsetY;
+                offset2 = minuteOffsetY;
+            }
+
+            if(isInAmbientMode()) {
+                canvas.drawRect(0, 0, bounds.width(), bounds.height(), mBackgroundAmbient);
+                canvas.drawText(SwearStrings.IT_IS, offsetX, offsetY, mStrokePaint);
+
+                canvas.drawText(SwearStrings.getHour(mTime), offsetX, offset1, mStrokePaint);
+                canvas.drawText(SwearStrings.getFucking(mTime), offsetX, fuckingOffsetY, mStrokePaint);
+                canvas.drawText(SwearStrings.getMinute(mTime), offsetX, offset2, mStrokePaint);
+            }
+            else {
+                canvas.drawRect(0, 0, bounds.width(), bounds.height(), mBackground);
+                canvas.drawText(SwearStrings.IT_IS, offsetX, offsetY, mBoldPaint);
+
+                canvas.drawText(SwearStrings.getHour(mTime), offsetX, offset1, mNormalPaint);
+                canvas.drawText(SwearStrings.getFucking(mTime), offsetX, fuckingOffsetY, mNormalPaint);
+                canvas.drawText(SwearStrings.getMinute(mTime), offsetX, offset2, mNormalPaint);
+            }
         }
 
         @Override
