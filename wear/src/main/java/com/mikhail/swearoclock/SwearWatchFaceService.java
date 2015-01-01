@@ -19,7 +19,6 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 
 import java.util.TimeZone;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Mikhail on 28/12/2014.
@@ -31,10 +30,6 @@ public class SwearWatchFaceService extends CanvasWatchFaceService{
      *  considering the precision of the clock is already at 5 minutes
      */
     static final long NORMAL_UPDATE_RATE_MS = 5000;
-
-    /** Update every minute
-     */
-    static final long MUTE_UPDATE_RATE_MS = TimeUnit.MINUTES.toMillis(1);
 
     static final Typeface BOLD_TYPEFACE =
             Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD);
@@ -94,10 +89,10 @@ public class SwearWatchFaceService extends CanvasWatchFaceService{
         private Paint mStrokePaint;
         private Paint mBackgroundAmbient;
 
-        private static final float offsetX = 65.0f;
-        private static final float offsetY = 75.0f;
-        private static final float hourOffsetY = 105.0f;
-        private static final float fuckingOffsetY = 135.0f;
+        private static final float mOffsetX = 65.0f;
+        private static final float mOffsetY = 75.0f;
+        private static final float mHourOffsetY = 105.0f;
+        private static final float mFuckingOffsetY = 135.0f;
         private static final float minuteOffsetY = 165.0f;
 
         private void updateTimer() {
@@ -181,32 +176,33 @@ public class SwearWatchFaceService extends CanvasWatchFaceService{
 
         @Override
         public void onDraw(Canvas canvas, Rect bounds) {
+            mTime.setToNow();
             float offset1, offset2;
 
             if(SwearStrings.hasMinutes(mTime)) {
                 offset1 = minuteOffsetY;
-                offset2 = hourOffsetY;
+                offset2 = mHourOffsetY;
             }
             else {
-                offset1 = hourOffsetY;
+                offset1 = mHourOffsetY;
                 offset2 = minuteOffsetY;
             }
 
             if(isInAmbientMode()) {
                 canvas.drawRect(0, 0, bounds.width(), bounds.height(), mBackgroundAmbient);
-                canvas.drawText(SwearStrings.IT_IS, offsetX, offsetY, mStrokePaint);
+                canvas.drawText(SwearStrings.IT_IS, mOffsetX, mOffsetY, mStrokePaint);
 
-                canvas.drawText(SwearStrings.getHour(mTime), offsetX, offset1, mStrokePaint);
-                canvas.drawText(SwearStrings.getFucking(mTime), offsetX, fuckingOffsetY, mStrokePaint);
-                canvas.drawText(SwearStrings.getMinute(mTime), offsetX, offset2, mStrokePaint);
+                canvas.drawText(SwearStrings.getHour(mTime), mOffsetX, offset1, mStrokePaint);
+                canvas.drawText(SwearStrings.getFucking(mTime), mOffsetX, mFuckingOffsetY, mStrokePaint);
+                canvas.drawText(SwearStrings.getMinute(mTime), mOffsetX, offset2, mStrokePaint);
             }
             else {
                 canvas.drawRect(0, 0, bounds.width(), bounds.height(), mBackground);
-                canvas.drawText(SwearStrings.IT_IS, offsetX, offsetY, mBoldPaint);
+                canvas.drawText(SwearStrings.IT_IS, mOffsetX, mOffsetY, mBoldPaint);
 
-                canvas.drawText(SwearStrings.getHour(mTime), offsetX, offset1, mNormalPaint);
-                canvas.drawText(SwearStrings.getFucking(mTime), offsetX, fuckingOffsetY, mNormalPaint);
-                canvas.drawText(SwearStrings.getMinute(mTime), offsetX, offset2, mNormalPaint);
+                canvas.drawText(SwearStrings.getHour(mTime), mOffsetX, offset1, mNormalPaint);
+                canvas.drawText(SwearStrings.getFucking(mTime), mOffsetX, mFuckingOffsetY, mNormalPaint);
+                canvas.drawText(SwearStrings.getMinute(mTime), mOffsetX, offset2, mNormalPaint);
             }
         }
 
