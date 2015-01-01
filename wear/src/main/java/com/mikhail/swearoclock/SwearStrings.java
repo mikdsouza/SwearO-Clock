@@ -54,6 +54,11 @@ public final class SwearStrings {
         return minute > 2.5f;
     }
 
+    public static String getDateString(Time time) {
+        return dayToWord(time.weekDay) + ", " + time.monthDay + " " + monthToWord(time.month) + " "
+                + time.year;
+    }
+
     private static String hourToWord(int hour) {
         switch(hour) {
             case 1: return "ONE";
@@ -106,5 +111,36 @@ public final class SwearStrings {
             return "FIFTY FIVE";
         else
             return "MEHH";
+    }
+
+    private static String dayToWord(int day) {
+        switch (day) {
+            case Time.SUNDAY: return "SUN";
+            case Time.MONDAY: return "MON";
+            case Time.TUESDAY: return "TUE";
+            case Time.WEDNESDAY: return "WED";
+            case Time.THURSDAY: return "THU";
+            case Time.FRIDAY: return "FRI";
+            case Time.SATURDAY: return "SAT";
+            default: return "MEHH";
+        }
+    }
+
+    private static String monthToWord(int month) {
+        switch(month) {
+            case 0: return "JAN";
+            case 1: return "FEB";
+            case 2: return "MARCH";
+            case 3: return "APRIL";
+            case 4: return "MAY";
+            case 5: return "JUNE";
+            case 6: return "JULY";
+            case 7: return "AUG";
+            case 8: return "SEPT";
+            case 9: return "OCT";
+            case 10: return "NOV";
+            case 11: return "DEC";
+            default: return "MEHH";
+        }
     }
 }
