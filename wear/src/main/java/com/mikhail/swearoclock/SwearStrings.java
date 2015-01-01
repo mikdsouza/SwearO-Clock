@@ -7,7 +7,7 @@ import android.text.format.Time;
  */
 public final class SwearStrings {
 
-    public static final String IT_IS = "IT IS";
+    public static final String IT_IS = "It is";
 
     public static String getHour(Time time) {
         int hour = time.hour;
@@ -61,86 +61,86 @@ public final class SwearStrings {
 
     private static String hourToWord(int hour) {
         switch(hour) {
-            case 1: return "ONE";
-            case 2: return "TWO";
-            case 3: return "THREE";
-            case 4: return "FOUR";
-            case 5: return "FIVE";
-            case 6: return "SIX";
-            case 7: return "SEVEN";
-            case 8: return "EIGHT";
-            case 9: return "NINE";
-            case 10: return "TEN";
-            case 11: return "ELEVEN";
-            case 12: return "TWELVE";
-            default: return "MEHH";
+            case 1: return "One";
+            case 2: return "Two";
+            case 3: return "Three";
+            case 4: return "Four";
+            case 5: return "Five";
+            case 6: return "Six";
+            case 7: return "Seven";
+            case 8: return "Eight";
+            case 9: return "Nine";
+            case 10: return "Ten";
+            case 11: return "Eleven";
+            case 12: return "Twelve";
+            default: return "Err";
         }
     }
 
     private static String minuteToFucking(float minute) {
         if (minute <= 2.5f)
-            return "O'FUCKING";
+            return "O'Fucking";
         else
-            return "FUCKING PAST";
+            return "Fucking Past";
     }
 
     private static String minuteToWords(float minute) {
         if (minute <= 2.5f)
-            return "CLOCK";
+            return "Clock";
         else if (minute <= 7.5f)
-            return "FIVE";
+            return "Five";
         else if (minute <= 12.5f)
-            return "TEN";
+            return "Ten";
         else if (minute <= 17.5f)
-            return "FIFTEEN";
+            return "Fifteen";
         else if (minute <= 22.5f)
-            return "TWENTY";
+            return "Twenty";
         else if (minute <= 27.5f)
-            return "TWENTY FIVE";
+            return "Twenty Five";
         else if (minute <= 32.5f)
-            return "THIRTY";
+            return "Thirty";
         else if (minute <= 37.5f)
-            return "THIRTY FIVE";
+            return "Thirty Five";
         else if (minute <= 42.5f)
-            return "FORTY";
+            return "Forty";
         else if (minute <= 47.5f)
-            return "FORTY FIVE";
+            return "Forty Five";
         else if (minute <= 52.5f)
-            return "FIFTY";
+            return "Fifty";
         else if (minute <= 57.5f)
-            return "FIFTY FIVE";
+            return "Fifty Five";
         else
             return "MEHH";
     }
 
     private static String dayToWord(int day) {
         switch (day) {
-            case Time.SUNDAY: return "SUN";
-            case Time.MONDAY: return "MON";
-            case Time.TUESDAY: return "TUE";
-            case Time.WEDNESDAY: return "WED";
-            case Time.THURSDAY: return "THU";
-            case Time.FRIDAY: return "FRI";
-            case Time.SATURDAY: return "SAT";
-            default: return "MEHH";
+            case Time.SUNDAY: return "Sun";
+            case Time.MONDAY: return "Mon";
+            case Time.TUESDAY: return "Tue";
+            case Time.WEDNESDAY: return "Wed";
+            case Time.THURSDAY: return "The";
+            case Time.FRIDAY: return "Fri";
+            case Time.SATURDAY: return "Sat";
+            default: return "Err";
         }
     }
 
     private static String monthToWord(int month) {
         switch(month) {
-            case 0: return "JAN";
-            case 1: return "FEB";
-            case 2: return "MARCH";
-            case 3: return "APRIL";
-            case 4: return "MAY";
-            case 5: return "JUNE";
-            case 6: return "JULY";
-            case 7: return "AUG";
-            case 8: return "SEPT";
-            case 9: return "OCT";
-            case 10: return "NOV";
-            case 11: return "DEC";
-            default: return "MEHH";
+            case 0: return "Jan";
+            case 1: return "Feb";
+            case 2: return "March";
+            case 3: return "April";
+            case 4: return "May";
+            case 5: return "June";
+            case 6: return "July";
+            case 7: return "Aug";
+            case 8: return "Sept";
+            case 9: return "Oct";
+            case 10: return "Nov";
+            case 11: return "Dec";
+            default: return "Err";
         }
     }
 }

@@ -32,9 +32,9 @@ public class SwearWatchFaceService extends CanvasWatchFaceService{
     static final long NORMAL_UPDATE_RATE_MS = 5000;
 
     static final Typeface BOLD_TYPEFACE =
-            Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD);
+            Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD);
     static final Typeface NORMAL_TYPEFACE =
-            Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL);
+            Typeface.create(Typeface.DEFAULT, Typeface.NORMAL);
 
     static final int MSG_UPDATE_TIME = 0;
 
@@ -93,9 +93,9 @@ public class SwearWatchFaceService extends CanvasWatchFaceService{
         private static final float mDateOffsetX = 15.0f;
 
         private static final float mOffsetY = 75.0f;
-        private static final float mHourOffsetY = 105.0f;
-        private static final float mFuckingOffsetY = 135.0f;
-        private static final float mMinuteOffsetY = 165.0f;
+        private static final float mHourOffsetY = 110.0f;
+        private static final float mFuckingOffsetY = 145.0f;
+        private static final float mMinuteOffsetY = 180.0f;
         private static final float mDateOffsetY = 215.0f;
 
         private void updateTimer() {
@@ -152,6 +152,7 @@ public class SwearWatchFaceService extends CanvasWatchFaceService{
             result.setTypeface(typeface);
             result.setColor(color);
             result.setTextSize(textSize);
+            result.setAntiAlias(true);
             return result;
         }
 
