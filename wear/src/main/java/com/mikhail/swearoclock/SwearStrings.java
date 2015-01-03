@@ -2,6 +2,8 @@ package com.mikhail.swearoclock;
 
 import android.text.format.Time;
 
+import java.util.Random;
+
 /**
  * Created by Mikhail on 28/12/2014.
  */
@@ -33,7 +35,7 @@ public final class SwearStrings {
         if (minute > 57.5f)
             minute = 0;
 
-        return minuteToFucking(minute);
+        return minuteToFucking(minute, time.hour, time.monthDay, time.month, time.year);
     }
 
     public static String getMinute(Time time) {
@@ -77,11 +79,27 @@ public final class SwearStrings {
         }
     }
 
-    private static String minuteToFucking(float minute) {
+    private static String minuteToFucking(float minute, int hour, int day, int month, int year) {
+        String fucking;
+
+        Random rand = new Random((long)((int)minute + hour + day + month + year));
+
+        switch(rand.nextInt(3)) {
+            case 0: fucking = "Freaking";
+                break;
+            case 1: fucking = "Bloody";
+                break;
+            case 2: fucking = "Shitting";
+                break;
+            default: fucking = "Fucking";
+                break;
+        }
+
         if (minute <= 2.5f)
-            return "O'Fucking";
-        else
-            return "Fucking Past";
+            return "O'" + fucking;
+        else {
+            return fucking + " Past";
+        }
     }
 
     private static String minuteToWords(float minute) {
