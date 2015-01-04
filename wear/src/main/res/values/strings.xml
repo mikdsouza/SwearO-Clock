@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Swear O\'Clock</string>
-    <string name="analog_name">Swear O\'Clock</string>
+    <string name="swearface_name">Swear O\'Clock</string>
+    <string name="binaryface_name">Binary Clock</string>
 </resources>

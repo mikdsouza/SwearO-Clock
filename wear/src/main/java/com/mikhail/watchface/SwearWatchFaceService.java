@@ -77,8 +77,6 @@ public class SwearWatchFaceService extends WatchFace{
             mStrokePaint = createTypefacePaint(BOLD_TYPEFACE, Color.WHITE, 35.0f);
             mStrokePaint.setStyle(Paint.Style.STROKE);
             mStrokePaint.setStrokeWidth(1);
-
-            mTime = new Time();
         }
 
         @Override
