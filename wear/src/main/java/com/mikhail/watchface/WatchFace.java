@@ -20,6 +20,8 @@ import android.view.SurfaceHolder;
 import java.util.TimeZone;
 
 /**
+ * The purpose of this class is to provide the base bones as suggested by the android
+ * wear tutorial.
  * Created by Mikhail on 4/01/2015.
  */
 public abstract class WatchFace extends CanvasWatchFaceService {
