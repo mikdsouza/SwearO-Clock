@@ -33,6 +33,8 @@ public class BinaryWatchFaceService extends WatchFace {
         private final int mHollowDotSerparation = 10;
 
         private final int mHourOffestY = 70;
+        private final int mMinuteOffsetY = mHourOffestY + mHollowDiameter + mHollowDotSerparation;
+        private final int mSecondOffsetY = mMinuteOffsetY + mHollowDiameter + mHollowDotSerparation;
 
         @Override
         protected int MSG_UPDATE_TIME() {
@@ -80,8 +82,7 @@ public class BinaryWatchFaceService extends WatchFace {
                 canvas.drawRect(bounds, mBackgroudPaint);
             }
 
-            String hourBinary = String.format("%5s", Integer.toBinaryString(mTime.hour))
-                    .replace(' ', '0');
+            String hourBinary = getBinaryString(mTime.hour, 5);
             int[] hourDots = getDotPositions(bounds, 5);
 
             for(int i = 0; i < 5; i++) {
@@ -90,6 +91,33 @@ public class BinaryWatchFaceService extends WatchFace {
                 if(hourBinary.charAt(i) == '1')
                     canvas.drawCircle(hourDots[i], mHourOffestY, mSolidDiameter / 2, mSolidPaint);
             }
+
+            String minuteBinary = getBinaryString(mTime.minute, 6);
+            int[] minuteDots = getDotPositions(bounds, 6);
+
+            for(int i = 0; i < 6; i++) {
+                canvas.drawCircle(minuteDots[i], mMinuteOffsetY, mHollowDiameter / 2, mHollowPaint);
+
+                if(minuteBinary.charAt(i) == '1')
+                    canvas.drawCircle(minuteDots[i], mMinuteOffsetY, mSolidDiameter / 2, mSolidPaint);
+            }
+
+            if(!isInAmbientMode()) {
+                String secondBinary = getBinaryString(mTime.second, 6);
+                int[] secondDots = getDotPositions(bounds, 6);
+
+                for(int i = 0; i < 6; i++) {
+                    canvas.drawCircle(secondDots[i], mSecondOffsetY, mHollowDiameter / 2, mHollowPaint);
+
+                    if(secondBinary.charAt(i) == '1')
+                        canvas.drawCircle(secondDots[i], mSecondOffsetY, mSolidDiameter / 2, mSolidPaint);
+                }
+            }
+
+        }
+
+        private String getBinaryString(int number, int size) {
+            return String.format("%" + size + "s", Integer.toBinaryString(number)).replace(' ', '0');
         }
 
         private int[] getDotPositions(Rect bounds, final int numOfDots) {
