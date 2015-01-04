@@ -1,4 +1,4 @@
-package com.mikhail.swearoclock;
+package com.mikhail.watchface;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

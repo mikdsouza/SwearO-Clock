@@ -1,4 +1,4 @@
-package com.mikhail.swearoclock;
+package com.mikhail.watchface;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
