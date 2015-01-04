@@ -50,7 +50,7 @@
                 android:resource="@drawable/potato" />
             <meta-data
                 android:name="com.google.android.wearable.watchface.preview_circular"
-                android:resource="@drawable/potato" />
+                android:resource="@drawable/binarywatch_round" />
             <intent-filter>
                 <action android:name="android.service.wallpaper.WallpaperService" />
                 <category

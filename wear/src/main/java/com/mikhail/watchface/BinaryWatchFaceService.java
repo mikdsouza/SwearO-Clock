@@ -9,6 +9,7 @@ import android.support.wearable.watchface.WatchFaceStyle;
 import android.view.SurfaceHolder;
 
 /**
+ * This is the binary watchface
  * Created by Mikhail on 4/01/2015.
  */
 public class BinaryWatchFaceService extends WatchFace {
@@ -23,18 +24,20 @@ public class BinaryWatchFaceService extends WatchFace {
     protected class BinaryEngine extends Engine {
 
         private Paint mNormalPaint;
-        private Paint mBackgroudPaint;
-        private Paint mBackgroudPaintAmbient;
+        private Paint mBackgroundPaint;
+        private Paint mBackgroundPaintAmbient;
         private Paint mHollowPaint;
         private Paint mSolidPaint;
 
         private final int mSolidDiameter = 8;
         private final int mHollowDiameter = 16;
-        private final int mHollowDotSerparation = 10;
+        private final int mHollowDotSeparation = 10;
 
-        private final int mHourOffestY = 70;
-        private final int mMinuteOffsetY = mHourOffestY + mHollowDiameter + mHollowDotSerparation;
-        private final int mSecondOffsetY = mMinuteOffsetY + mHollowDiameter + mHollowDotSerparation;
+        private final int mHourOffsetY = 70;
+        private final int mMinuteOffsetY = mHourOffsetY + mHollowDiameter + mHollowDotSeparation;
+        private final int mSecondOffsetY = mMinuteOffsetY + mHollowDiameter + mHollowDotSeparation;
+        private final int mDateOffsetY = mSecondOffsetY + mHollowDiameter +
+                mHollowDotSeparation * 2;
 
         @Override
         protected int MSG_UPDATE_TIME() {
@@ -56,13 +59,13 @@ public class BinaryWatchFaceService extends WatchFace {
                     .setShowSystemUiTime(false)
                     .build());
 
-            mNormalPaint = createTypefacePaint(Typeface.DEFAULT, Color.WHITE, 35.0f);
+            mNormalPaint = createTypefacePaint(Typeface.DEFAULT, Color.WHITE, 20.0f);
 
-            mBackgroudPaint = new Paint();
-            mBackgroudPaint.setColor(Color.GREEN);
+            mBackgroundPaint = new Paint();
+            mBackgroundPaint.setColor(Color.GREEN);
 
-            mBackgroudPaintAmbient = new Paint();
-            mBackgroudPaint.setColor(Color.BLACK);
+            mBackgroundPaintAmbient = new Paint();
+            mBackgroundPaint.setColor(Color.BLACK);
 
             mHollowPaint = new Paint();
             mHollowPaint.setColor(Color.WHITE);
@@ -76,20 +79,20 @@ public class BinaryWatchFaceService extends WatchFace {
         @Override
         protected void doOnDraw(Canvas canvas, Rect bounds) {
             if(isInAmbientMode()) {
-                canvas.drawRect(bounds, mBackgroudPaintAmbient);
+                canvas.drawRect(bounds, mBackgroundPaintAmbient);
             }
             else {
-                canvas.drawRect(bounds, mBackgroudPaint);
+                canvas.drawRect(bounds, mBackgroundPaint);
             }
 
             String hourBinary = getBinaryString(mTime.hour, 5);
             int[] hourDots = getDotPositions(bounds, 5);
 
             for(int i = 0; i < 5; i++) {
-                canvas.drawCircle(hourDots[i], mHourOffestY, mHollowDiameter / 2, mHollowPaint);
+                canvas.drawCircle(hourDots[i], mHourOffsetY, mHollowDiameter / 2, mHollowPaint);
 
                 if(hourBinary.charAt(i) == '1')
-                    canvas.drawCircle(hourDots[i], mHourOffestY, mSolidDiameter / 2, mSolidPaint);
+                    canvas.drawCircle(hourDots[i], mHourOffsetY, mSolidDiameter / 2, mSolidPaint);
             }
 
             String minuteBinary = getBinaryString(mTime.minute, 6);
@@ -114,6 +117,22 @@ public class BinaryWatchFaceService extends WatchFace {
                 }
             }
 
+            String date = SwearStrings.getDateString(mTime);
+            float dateX = (bounds.width() - getTextWidth(date, mNormalPaint)) / 2;
+            canvas.drawText(date, dateX, mDateOffsetY, mNormalPaint);
+        }
+
+        private float getTextWidth(String text, Paint paint) {
+            float[] widths = new float[text.length()];
+            paint.getTextWidths(text, 0, text.length(), widths);
+
+            float result = 0;
+
+            for(float width : widths) {
+                result += width;
+            }
+
+            return result;
         }
 
         private String getBinaryString(int number, int size) {
@@ -127,7 +146,7 @@ public class BinaryWatchFaceService extends WatchFace {
 
             for(int i = 0; i < numOfDots; i++) {
                 dots[i] = left + mHollowDiameter / 2;
-                left += mHollowDiameter + mHollowDotSerparation;
+                left += mHollowDiameter + mHollowDotSeparation;
             }
 
             return dots;
@@ -139,7 +158,7 @@ public class BinaryWatchFaceService extends WatchFace {
          * @return Returns a float representing the length of the dots
          */
         private int getDotsLength(int numOfDots) {
-            return (numOfDots * mHollowDiameter) + ((numOfDots - 1) * mHollowDotSerparation);
+            return (numOfDots * mHollowDiameter) + ((numOfDots - 1) * mHollowDotSeparation);
         }
     }
 }
