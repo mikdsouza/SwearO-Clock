@@ -55,9 +55,7 @@ public class SwearWatchFaceService extends WatchFace{
         }
 
         @Override
-        public void onCreate(SurfaceHolder holder) {
-            super.onCreate(holder);
-
+        public void doOnCreate(SurfaceHolder holder) {
             /* configure the system UI */
             setWatchFaceStyle(new WatchFaceStyle.Builder(SwearWatchFaceService.this)
                     .setCardPeekMode(WatchFaceStyle.PEEK_MODE_SHORT)
@@ -84,9 +82,7 @@ public class SwearWatchFaceService extends WatchFace{
         }
 
         @Override
-        public void onDraw(Canvas canvas, Rect bounds) {
-            super.onDraw(canvas, bounds);
-
+        public void doOnDraw(Canvas canvas, Rect bounds) {
             float Xoffset1, Xoffest2, Yoffset1, Yoffset2;
 
             if(SwearStrings.hasMinutes(mTime)) {

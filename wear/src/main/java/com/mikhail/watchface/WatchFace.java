@@ -88,7 +88,11 @@ public abstract class WatchFace extends CanvasWatchFaceService {
             };
 
             mTime = new Time();
+
+            doOnCreate(holder);
         }
+
+        protected abstract void doOnCreate(SurfaceHolder holder);
 
         protected Paint createTypefacePaint(Typeface typeface, int color, float textSize) {
             Paint result = new Paint();
@@ -123,7 +127,10 @@ public abstract class WatchFace extends CanvasWatchFaceService {
         @Override
         public void onDraw(Canvas canvas, Rect bounds) {
             mTime.setToNow();
+            doOnDraw(canvas, bounds);
         }
+
+        protected abstract void doOnDraw(Canvas canvas, Rect bounds);
 
         @Override
         public void onVisibilityChanged(boolean visible) {
